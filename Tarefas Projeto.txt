@@ -1,0 +1,20 @@
+Parte Utilizador
+-Criar users;
+-Fazer Login (verificar se existe);
+-Pesquisar Produtos
+-Adicionar produtos ao carrinhho;
+-Comprar produtos do carrinho;
+-Verificar Compras;
+
+
+Parte adminitrador (Acedido apenas com chave/password)
+-Adicionar produtos
+-Verificar registos (Gastos, Ganhos, produtos em armazem,...)
+
+
+Classes
+-Aceder dados:
+	-Clientes;
+	-Peodutos;
+	-Armazem;
+	-...
