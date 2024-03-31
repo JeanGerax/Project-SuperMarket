@@ -37,7 +37,6 @@ fun loginCliente(caminho: String) {
 
     if (clientesBD.verificarConta(email, password)) {
         println("Login bem sucedido!")
-
     } else {
         println("Email ou senha incorretos.")
     }
