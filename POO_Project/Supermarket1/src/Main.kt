@@ -2,7 +2,8 @@ fun main() {
     println("Bem Vindo ao SuperMarket!")
 
     // Caminho para o ficheiro CSV de clientes (Por enquanto apenas funciona assim)
-    val caminho: String = "C:\\Users\\didic\\Documents\\ctesp\\2ºSemestre\\POO_Project\\Supermarket1\\src\\"
+    val caminho1: String = "C:\\Users\\didic\\Documents\\ctesp\\2ºSemestre\\POO_Project\\Supermarket1\\src\\"
+    val caminho2: String = "C:\\Users\\didic\\Documents\\ctesp\\2ºSemestre\\POO_Project\\Supermarket1\\src\\"
 
     var opc: Int
     do {
@@ -17,16 +18,20 @@ fun main() {
         opc = readLine()?.toInt() ?: 0
 
         when (opc) {
-            1 -> loginCliente(caminho)
-            2 -> criarCliente(caminho)
-            3 -> adm()
+            1 -> loginCliente(caminho1)
+            2 -> criarCliente(caminho1)
+            3 -> adm(caminho2)
         }
     } while (opc != 0)
     println("Adeus! Obrigado por visitar o nosso Supermarket!")
 }
 
-fun loginCliente(caminho: String) {
-    val clientesBD = Clientes(clientesFilename = caminho + "Clientes.csv")
+fun cliente(){
+
+}
+
+fun loginCliente(caminho1: String) {
+    val clientesBD = Clientes(clientesFilename = caminho1 + "Clientes.csv")
     clientesBD.load()
 
     var email: String
@@ -44,8 +49,8 @@ fun loginCliente(caminho: String) {
     }
 }
 
-fun criarCliente(caminho: String) {
-    val clientesBD = Clientes(clientesFilename = caminho + "Clientes.csv")
+fun criarCliente(caminho1: String) {
+    val clientesBD = Clientes(clientesFilename = caminho1 + "Clientes.csv")
     clientesBD.load()
 
     var nome: String
@@ -80,6 +85,10 @@ fun criarCliente(caminho: String) {
 
 }
 
-fun adm() {
+//Temporariamente os produtos estão aqui depois tem de se alterar para aparecer nos clientes
+fun adm(caminho2: String) {
+    val produtosBD = Produtos(produtosFilename = caminho2 + "Produtos.csv")
+    produtosBD.load()
+
 
 }

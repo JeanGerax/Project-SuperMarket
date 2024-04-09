@@ -42,7 +42,7 @@ class Clientes(private val clientesFilename: String) {
         atualizarCSV()
     }
 
-    //Atualizar no csv com os novos dados
+    //Atualizar no csv com nova linha
     private fun atualizarCSV() {
         val file = File(clientesFilename)
         if (!file.exists()) {
