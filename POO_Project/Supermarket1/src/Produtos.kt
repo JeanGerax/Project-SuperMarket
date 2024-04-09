@@ -20,4 +20,8 @@ class Produtos (val produtosFilename: String){
 //        }
 
     }
+
+    fun addProduct(){
+
+    }
 }

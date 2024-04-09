@@ -11,6 +11,8 @@ fun main() {
         println("- 1- Login Clientes  -")
         println("- 2- Criar Conta     -")
         println("- 3- Administração   -")
+        println("-                    -")
+        println("- 0- Sair            -")
         println("----------------------")
         println("")
         println("Digite um número diferente de zero (ou 0 para sair): ")
@@ -27,6 +29,10 @@ fun main() {
 }
 
 fun cliente(){
+    //Menu para o cliente após fazer login
+
+
+
 
 }
 
@@ -87,8 +93,16 @@ fun criarCliente(caminho1: String) {
 
 //Temporariamente os produtos estão aqui depois tem de se alterar para aparecer nos clientes
 fun adm(caminho2: String) {
+    var opc1:String =""
+    do{
+        println("Qual a chave para acessar a área administrador? Para voltar 'SAIR'")
+        opc1 = readLine() ?: ""
+        if (opc1 == "SAIR"){
+            break
+        }
+    } while (opc1!="ADM")
+
     val produtosBD = Produtos(produtosFilename = caminho2 + "Produtos.csv")
     produtosBD.load()
-
 
 }
