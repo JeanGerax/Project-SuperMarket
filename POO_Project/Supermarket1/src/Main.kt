@@ -22,7 +22,7 @@ fun main() {
         when (opc) {
             1 -> loginCliente(caminho)
             2 -> criarCliente(caminho)
-            3 -> adm(caminho)
+            3 -> adm()
         }
     } while (opc != 0)
     println("Adeus! Obrigado por visitar o nosso Supermarket!")
@@ -34,6 +34,9 @@ fun cliente(){
 
 }
 
+//FUNCOES CLIENTE
+
+//Fazer login
 fun loginCliente(caminho: String) {
     val clientesBD = Clientes(clientesFilename = caminho + "Clientes.csv")
     clientesBD.load()
@@ -58,6 +61,8 @@ fun loginCliente(caminho: String) {
             println("- 0- Sair      -")
             println("----------------")
 
+            println("Digite a opcção que deseja!")
+            opc2 = readLine()?.toInt() ?: 0
             when(opc2){
                 1 -> produtos(caminho)
                 2 -> carrinho()
@@ -70,6 +75,7 @@ fun loginCliente(caminho: String) {
     }
 }
 
+//Criar Conta
 fun criarCliente(caminho: String) {
     val clientesBD = Clientes(clientesFilename = caminho + "Clientes.csv")
     clientesBD.load()
@@ -106,32 +112,39 @@ fun criarCliente(caminho: String) {
 
 }
 
-//Temporariamente os produtos estão aqui depois tem de se alterar para aparecer nos clientes
+//Consultar produtos
+fun produtos(caminho: String){
+    val produtosBD = Produtos(produtosFilename = caminho + "Produtos.csv")
+    produtosBD.load()
+
+}
+
+//Consultar carrinho
+fun carrinho(){
+
+}
+
+//Consultar faturas
+fun faturas(){
+
+}
+
+
+//FUNCOES ADMINISTRADOR
+
 fun adm() {
     var opc1:String =""
     do{
         println("Qual a chave para acessar a área administrador? Para voltar 'SAIR'")
         opc1 = readLine() ?: ""
         if (opc1 == "SAIR") {
-            break
+            //break
         }
     } while (opc1!="ADM")
 
 }
 
-fun produtos(caminho: String){
-    val produtosBD = Produtos(produtosFilename = caminho + "Produtos.csv")
-    produtosBD.load()
-}
-
-fun carrinho(){
-
-}
-
-fun faturas(){
-
-}
-
+//Adicionar Produtos
 fun addProduct(caminho: String){
 
 }
