@@ -1,21 +1,10 @@
-Parte Utilizador
--Criar users;
--Fazer Login (verificar se existe);
--Pesquisar Produtos
--Adicionar produtos ao carrinhho;
--Comprar produtos do carrinho;
--Verificar Compras;
--...
+Criar um programa de segmentação de clientes.
 
+Problemas
+    P1 Como eu crio os grupos? (De forma automatica)?
+    P2 Como eu aloco um cliente num grupo?
 
-Parte adminitrador (Acedido apenas com chave/password)
--Adicionar produtos
--Verificar registos (Gastos, Ganhos, produtos em armazem,...)
--...
-
-Classes
--Aceder dados:
-	-Clientes;
-	-Peodutos;
-	-Armazem;
-	-...
+    Exemplo:
+     cliente faz 6 compras num mes mas compra pouco, outro faz 4 compras e é apenas comida e
+     outro faz apenas uma compra paratodo o mes. Entao cada um deles estará num grupo, caso já exista um grupo
+     semelhante ele será adicionado a esse grupo
