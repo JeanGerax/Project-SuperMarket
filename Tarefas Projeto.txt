@@ -1,10 +1,22 @@
-Criar um programa de segmentação de clientes.
+Objetivo: Segmentação de Clientes
+---------------------------------------
 
-Problemas
-    P1 Como eu crio os grupos? (De forma automatica)?
-    P2 Como eu aloco um cliente num grupo?
+Problemas:
+P1 - Criar Ficheiro das compras
+P2 - Ler Ficheiro (passar os dados do csv para um mutableMap)
+P3 - Separar Clientes por grupos
+P4 - Mostrar Grupos (Inicialmente, mostar normalmente no terminal
+     do Intellij, e se depois conseguirmos fazer uma interface 
+     que mostre os grupos criados)
 
-    Exemplo:
-     cliente faz 6 compras num mes mas compra pouco, outro faz 4 compras e é apenas comida e
-     outro faz apenas uma compra paratodo o mes. Entao cada um deles estará num grupo, caso já exista um grupo
-     semelhante ele será adicionado a esse grupo
+_______________________________________
+
+SubProblemas:
+P1.1 - Quais dados Guardar?
+P3.1 - Como criar os grupos?
+
+Possivel solução para o P3.1:
+1. Antes de criar os grupos, separar os dados que vêm do csv por data, por exemplo todas as compras de janeiro de 2024 ficam guardadas numa mutableMap, as de fevereiro noutra, etc.
+
+2.Dentro desses grupos, voltar a fazer o mesmo mas agora dentro de cada grupo de data dividir clientes
+
