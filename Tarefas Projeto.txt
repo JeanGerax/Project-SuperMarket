@@ -2,7 +2,7 @@ Objetivo: Segmentação de Clientes
 ---------------------------------------
 
 Problemas:
-P1 - Criar Ficheiro das compras
+P1 - Criar Ficheiro das compras (Já fiz)
 P2 - Ler Ficheiro (passar os dados do csv para um mutableMap)
 P3 - Separar Clientes por grupos
 P4 - Mostrar Grupos (Inicialmente, mostar normalmente no terminal
@@ -12,11 +12,11 @@ P4 - Mostrar Grupos (Inicialmente, mostar normalmente no terminal
 _______________________________________
 
 SubProblemas:
-P1.1 - Quais dados Guardar?
+P1.1 - Quais dados Guardar? (Já fiz)
 P3.1 - Como criar os grupos?
 
 Possivel solução para o P3.1:
 1. Antes de criar os grupos, separar os dados que vêm do csv por data, por exemplo todas as compras de janeiro de 2024 ficam guardadas numa mutableMap, as de fevereiro noutra, etc.
 
-2.Dentro desses grupos, voltar a fazer o mesmo mas agora dentro de cada grupo de data dividir clientes
+2.Dentro desses grupos, voltar a fazer o mesmo mas agora dentro de cada grupo de data dividir clientes. Por  exemplo ao executar depois o projeto poderia ter opções para saber o que quero ver, se quero saber quantas pessoas foram, em janeiro de 2024, 2 vezes ao supermercado, quem foi 1, quem foi 3,..., e outra opção poderia ser mostrar igual ao outro por mes e ano, mas mostrava grupos dos que compraram pouco, os que muito,...,
 
