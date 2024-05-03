@@ -2,6 +2,9 @@ import java.io.File
 
 class Compras(private var fileCompras: String) {
     private val dadosCompras = mutableMapOf<String, List<String>>()
+    private val dadosPorData = mutableMapOf<String, MutableMap<String,List<String>>>()
+
+
 
     fun load():MutableMap<String, List<String>> {
         val file = File(fileCompras)
@@ -17,4 +20,39 @@ class Compras(private var fileCompras: String) {
         return dadosCompras
     }
 
+    fun separarClientes(){
+
+    }
+
+
+
+    fun extrairAnoMes():MutableMap<String, MutableMap<String,List<String>>> {
+
+        val lines = load()
+
+        for ((chave, lista) in lines) {
+            var data = lista.getOrNull(1)
+            var data2 = data?.substring(0,7)
+            var cliente = lista.getOrNull(0)
+            var produtos = lista.getOrNull(3)
+
+            if (dadosPorData.containsKey(data2)) {
+                println("Presente o valor $data2")
+
+            } else {
+                println("Não presente o valor $data2. Adicionando ao mapa.")
+                dadosPorData[data2!!] = mutableMapOf(cliente to listOf(produtos?))
+            }
+            //println("Chave: $chave, Data: ${data?.substring(0, 7)}")
+        }
+
+
+
+        return dadosPorData
+    }
+
+    fun main2() {
+        val listaPorData = extrairAnoMes()
+        println("Ano e mês: $listaPorData")
+    }
 }
