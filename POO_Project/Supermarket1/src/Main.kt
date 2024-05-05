@@ -1,15 +1,18 @@
 fun main() {
-    println("Segmentação de Clientes de um Supermercado!\n\n")
+    var opc: Int =100
+    //while (opc!=0) {
 
-    var file = Compras(fileCompras = "src\\compras.csv")
-    var dadosC = file.load()
-    val listaPorData = file.extrairAnoMes()
+        println("Segmentação de Clientes de um Supermercado!\n\n")
 
-    for (it in listaPorData) {
-        println(it)
-    }
+        var file = Compras(fileCompras = "src\\compras.csv")
+        var dadosC = file.load()
+        val listaPorData = file.dividirPorAnoMes()
 
+        todosDadosPorData(listaPorData)
+    //}
+}
 
+fun todosDadosPorData(listaPorData: MutableMap<String, MutableMap<String, List<String>>>){
     for (line in listaPorData) {
         val anoMes = line.key
         println("\nCompras na data: $anoMes")
@@ -17,7 +20,7 @@ fun main() {
         val innerMap = line.value
         for (cliente in innerMap) {
 
-            val clienteId = cliente.key
+            val clienteId = cliente.key.substring(0,4)
             val produtos = cliente.value
 
             println(" Cliente  $clienteId")
