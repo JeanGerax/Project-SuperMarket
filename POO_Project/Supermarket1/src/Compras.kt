@@ -29,30 +29,33 @@ class Compras(private var fileCompras: String) {
     fun extrairAnoMes():MutableMap<String, MutableMap<String,List<String>>> {
 
         val lines = load()
-
-        for ((chave, lista) in lines) {
-            var data = lista.getOrNull(1)
+        for (line in lines) {
+            var line2 = line.value
+            var data = line2.getOrNull(1)
             var data2 = data?.substring(0,7)
-            var cliente = lista.getOrNull(0)
-            var produtos = lista.getOrNull(3)
+
+            
+            val cliente = line2.getOrNull(0).toString()
+            var produtos = line2.drop(n=2)
+            val produtos1 = line.value.getOrNull(2)?.let { listOf(it) } ?: emptyList()
+            val initialData1 = mapOf(
+                cliente to produtos
+            )
+
+            val initialData2 = mutableMapOf(
+                cliente to produtos
+            )
 
             if (dadosPorData.containsKey(data2)) {
-                println("Presente o valor $data2")
+                //Se o ano-mes existir adiciona aos dados ja existintes outro cliente e produtos
+                dadosPorData[data2!!]?.putAll(initialData1)
 
             } else {
-                println("Não presente o valor $data2. Adicionando ao mapa.")
-                dadosPorData[data2!!] = mutableMapOf(cliente to listOf(produtos?))
+                //Se o ano-mes nao existir adiciona juntamente com o cliente e produtos
+                dadosPorData[data2!!] = initialData2
+
             }
-            //println("Chave: $chave, Data: ${data?.substring(0, 7)}")
         }
-
-
-
         return dadosPorData
-    }
-
-    fun main2() {
-        val listaPorData = extrairAnoMes()
-        println("Ano e mês: $listaPorData")
     }
 }
