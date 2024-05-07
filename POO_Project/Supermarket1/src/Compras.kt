@@ -3,7 +3,7 @@ import java.io.File
 class Compras(private var fileCompras: String) {
     private val dadosCompras = mutableMapOf<String, List<String>>()
     private val dadosPorData = mutableMapOf<String, MutableMap<String,List<String>>>()
-
+    private val dadosPorVezes = mutableMapOf<String, MutableMap<String,List<String>>>()
 
 
     fun load():MutableMap<String, List<String>> {
@@ -19,11 +19,6 @@ class Compras(private var fileCompras: String) {
         }
         return dadosCompras
     }
-
-    fun separarClientes(){
-
-    }
-
 
 
     fun dividirPorAnoMes():MutableMap<String, MutableMap<String,List<String>>> {
@@ -55,4 +50,9 @@ class Compras(private var fileCompras: String) {
         }
         return dadosPorData
     }
+
+
+
+//    fun dividirPorIdasAoSuper(){
+//    }
 }
