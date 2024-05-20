@@ -53,6 +53,28 @@ class Compras(private var fileCompras: String) {
 
 
 
-//    fun dividirPorIdasAoSuper(){
-//    }
-}
+ fun mostrarPorIdasAoSupermercadoNoAnoMes_v2(): MutableMap<String, MutableMap<String, Int>> {
+
+        val lines = load()
+        for (line in lines) {
+            val line2 = line.value
+            val data = line2.getOrNull(1)?.substring(0, 7)
+            val cliente = line2.getOrNull(0).toString()
+
+            if (data != null) {
+                if (dadosPorVezes.containsKey(data)) {
+                    val clientesPorData = dadosPorVezes[data]!!
+                    if (clientesPorData.containsKey(cliente)) {
+                        clientesPorData[cliente] = clientesPorData.getValue(cliente) + 1
+                    } else {
+                        clientesPorData[cliente] = 1
+                    }
+                } else {
+                    dadosPorVezes[data] = mutableMapOf(cliente to 1)
+                }
+            } else {
+                println("Data não existe!")
+            }
+        }
+        return dadosPorVezes
+    }
