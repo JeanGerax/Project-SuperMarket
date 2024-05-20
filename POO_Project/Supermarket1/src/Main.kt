@@ -26,8 +26,8 @@ fun main() {
                 todosDadosPorData(listaPorData)
             }
             2 -> {
-                //Ainda nao implementado
-
+                val listaPorData = file.mostrarPorIdasAoSupermercadoNoAnoMes_v2()
+                mostrarIdasAoSuperAnoMes(listaPorData)
             }
             0 -> println("Adeus!")
             else -> println("Opção inválida! Tente novamente.")
