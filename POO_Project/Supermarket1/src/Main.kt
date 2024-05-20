@@ -61,7 +61,22 @@ fun limparConsole() {
     }
 }
 
-fun vezesClientesCompraramNumMes(){
+fun mostrarIdasAoSuperAnoMes(listaPorData: MutableMap<String, MutableMap<String, Int>>){
 
+    for ((data, clientes) in listaPorData) {
+        val contagemClientesPorIdas = mutableMapOf<Int, Int>().withDefault { 0 }
 
+        for ((_, idas) in clientes) {
+            contagemClientesPorIdas[idas] = contagemClientesPorIdas.getValue(idas) + 1
+        }
+
+        println("Data: $data")
+        for ((idas, contagem) in contagemClientesPorIdas) {
+            println("Clientes que foram $idas vezes: $contagem")
+        }
+
+        println("\n")
+    }
+    println("\nDigite qualquer tecla para voltar...")
+    readLine()
 }
