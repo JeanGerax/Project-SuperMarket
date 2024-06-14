@@ -8,8 +8,6 @@ class Compras(private var fileCompras: String) {
     private val dadosPorQuantProd = mutableMapOf<String, MutableMap<Int,List<String>>>()
     private val dadosSuperPesq = mutableMapOf<Int, MutableMap<Int,MutableMap<Int, MutableMap<Int, List<String>>>>>()
 
-
-    //Trazar dados CSV para MutableMap
     fun load():MutableMap<String, List<String>> {
         val file = File(fileCompras)
         val lines = file.readLines().drop(n = 1)
@@ -24,8 +22,6 @@ class Compras(private var fileCompras: String) {
         return dadosCompras
     }
 
-
-    //Todos os Dados por Ano-Mes
     fun dividirPorAnoMes(): MutableMap<String, MutableMap<String, List<String>>> {
         val lines = load()
         for (line in lines) {
@@ -50,8 +46,6 @@ class Compras(private var fileCompras: String) {
         return dadosPorData
     }
 
-
-    //Idas ao Supermercado no Ano-Mes
     fun mostrarPorIdasAoSupermercadoNoAnoMes_v2(): MutableMap<String, MutableMap<String, Int>> {
         val lines = load()
         for (line in lines) {
@@ -77,8 +71,6 @@ class Compras(private var fileCompras: String) {
         return dadosPorVezes
     }
 
-
-    //Total de Produtos Comprados no Ano-Mes
     fun mostrarPorNumeroProductosComprados(): MutableMap<String, MutableMap<Int, List<String>>>{
         val lines = load()
         for (line in lines) {
@@ -110,8 +102,6 @@ class Compras(private var fileCompras: String) {
         return dadosPorQuantProd
     }
 
-
-    //Frequência de Compra de Produto no Ano-Mes
     fun buscarPorNumeroProductosComprados(): MutableMap<String, MutableMap<String,Int>> {
         val numProductosComprados_v2 = mutableMapOf<String, MutableMap<String,Int>>()
         val lines = load()
@@ -141,16 +131,12 @@ class Compras(private var fileCompras: String) {
         return numProductosComprados_v2
     }
 
-
-    //Pesuisar por Ano-Mes
     fun pesquisarProdutoNoAnoMes(anoMes: String): MutableMap<String, List<String>>? {
         val dados = dividirPorAnoMes()
         val comprasPorData_v2 = dados["$anoMes"]
         return comprasPorData_v2
     }
 
-
-    //Super Pesquisa
     fun superPesq():MutableMap<Int, MutableMap<Int, MutableMap<Int, MutableMap<Int, List<String>>>>>{
         val lines = load()
         for (line in lines) {

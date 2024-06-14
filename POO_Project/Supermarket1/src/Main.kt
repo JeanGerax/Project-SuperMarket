@@ -1,7 +1,7 @@
 import java.io.File
 import java.io.IOException
 
-var caminho = "src\\main\\kotlin\\ficheiros\\"
+var caminho = "Supermarket1\\src\\ficheiros\\"
 
 fun main() {
     var opc: Int = 100
@@ -205,8 +205,6 @@ fun buscarPorNumeroProductosComprados(listaPorData: MutableMap<String, MutableMa
     var opcTeste = readLine()
 }
 
-
-//Pesuisar por Ano-Mes
 fun comprasAnoMes(anoMes: String ,prdutosNoAnoMes: MutableMap<String, List<String>>){
     println("Compras feitas na data $anoMes:")
     for(line in prdutosNoAnoMes){
@@ -388,12 +386,13 @@ fun perguntarFicheiro(){
             println("Opção inválida. Tente novamente.")
         }
     }
-
+    println("teste 1")
     var nomeFicheiro = csvFiles[opcFicheiro].toString()
+    var nomeFicheiro2 = nomeFicheiro.substring(0, nomeFicheiro.length - 4)
     nomeFicheiro = nomeFicheiro.substring(4, nomeFicheiro.length - 4)
     println(nomeFicheiro)
 
-    var inputFilePath = "src\\$nomeFicheiro.csv"
+    var inputFilePath = "$nomeFicheiro2.csv"
 
     if (inputFilePath.isNullOrBlank()) {
         println("Ficheiro Inválido.")

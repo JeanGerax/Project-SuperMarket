@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter
 
 class CsvOrganizer(private val inputFilePath: String) {
 
-    private val outputFileName = "C:\\Users\\gerem\\Downloads\\SupermarketDJ\\Supermarket1\\Supermarket\\src\\main\\kotlin\\ficheiros\\dados_organizados.csv"
+    private val outputFileName = "Supermarket1\\src\\ficheiros\\dados_organizados.csv"
 
    
     fun readCsv(): List<List<String>> {
@@ -18,7 +18,6 @@ class CsvOrganizer(private val inputFilePath: String) {
         }
     }
 
-    
     private fun organizeData(data: List<List<String>>): List<List<String>> {
         val header = data.first()
         val body = data.drop(1).filter { it.isNotEmpty() && it[0].isNotEmpty() }
