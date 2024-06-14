@@ -1,21 +1,24 @@
 import java.io.IOException
 
 fun main() {
-    var opc: Int =100
+    var opc: Int = 100
     do {
         limparConsole()
         println("Segmentação de Clientes de um Supermercado!\n")
 
-        var file = Compras(fileCompras = "C:\\Users\\gerem\\OneDrive\\Escritorio\\U.A\\SuperMarket\\SuperMarket1\\src\\compras.csv")
+        //var file = Compras(fileCompras = "C:\\Users\\gerem\\OneDrive\\Escritorio\\U.A\\SuperMarket\\SuperMarket1\\src\\compras.csv")
+        var file = Compras(fileCompras = "src\\main\\kotlin\\compras.csv")
         var dadosC = file.load()
 
-        println("--------------------Menu-------------------")
-        println("1 - Mostrar todos os dados por AnoMes")
-        println("2 - Ver por Idas ao supermercado no AnoMes(em desenvolvimento)")
-        println("3 - Ver por Numero de produtos comprados(falta fazer)")
-        println("4 - Pesuisar produto no AnoMes(falta fazes)")
-        //No futuro poderá ser adicionado outras
-        println("0 - Sair")
+        println("------------------------Menu----------------------")
+        println("| 1 - Todos os Dados por Ano-Mes                 |")
+        println("| 2 - Idas ao Supermercado no Ano-Mes            |")
+        println("| 3 - Total de Produtos Comprados no Ano-Mes     |")
+        println("| 4 - Frequência de Compra de Produto no Ano-Mes |")
+        println("| 5 - Pesuisar por Ano-Mes                       |")
+        println("| 6 - Super Pesquisa                             |")
+        println("| 0 - Sair                                       |")
+        println("--------------------------------------------------")
         print("\nEscolha uma opção: ")
 
         opc = readLine()?.toIntOrNull() ?: -1
@@ -29,37 +32,36 @@ fun main() {
                 val listaPorData = file.mostrarPorIdasAoSupermercadoNoAnoMes_v2()
                 mostrarIdasAoSuperAnoMes(listaPorData)
             }
-
             3 -> {
-                val listaPorData = file.buscarPorNumeroProductosComprados()
-                println("\nNúmero de produtos comprados:")
-                listaPorData.forEach { (producto, cantidad) ->
-                    println("Produto: $producto, Cantidad: $cantidad")
-                }
+                val listaPorData = file.mostrarPorNumeroProductosComprados()
+                mostrarPorNumProdComprados(listaPorData)
             }
             4 -> {
+                val listaPorData = file.buscarPorNumeroProductosComprados()
+                buscarPorNumeroProductosComprados(listaPorData)
+            }
+            5 -> {
                 println("Digite o ano e mês (no formato AAAA-MM) para pesquisar produtos:")
                 print("Ano-Mês: ")
-                val anoMes = readLine()?.trim()
-                if (anoMes != null) {
-                    val produtosNoAnoMes = file.pesquisarProdutoNoAnoMes(anoMes)
-                    if (produtosNoAnoMes != null) {
-                        println("\nProdutos comprados no mês $anoMes:")
-                        produtosNoAnoMes.forEach { println(it) }
-                    } else {
-                        println("Não há dados disponíveis para o ano e mês especificados.")
-                    }
-                } else {
-                    println("Formato de data inválido.")
-                }
+                val anoMes = readLine()!!.trim()
+                val produtosNoAnoMes: MutableMap<String, List<String>> = file.pesquisarProdutoNoAnoMes(anoMes)!!
+                comprasAnoMes(anoMes, produtosNoAnoMes)
             }
-
-            0 -> println("Adeus!")
-            else -> println("Opção inválida! Tente novamente.")
+            6 -> {
+                val dadosSuper = file.superPesq()
+                mostrarSuperPesq(dadosSuper)
+            }
+            0 -> {
+                println("\n\n--------------------Adeus!------------------------")
+            }
+            else -> {
+                println("Opção inválida! Tente novamente.")
+            }
         }
     } while (opc != 0)
 }
 
+//Todos os Dados por Ano-Mes
 fun todosDadosPorData(listaPorData: MutableMap<String, MutableMap<String, List<String>>>){
     for (line in listaPorData) {
         val ano = line.key.substring(0, 4)
@@ -76,19 +78,14 @@ fun todosDadosPorData(listaPorData: MutableMap<String, MutableMap<String, List<S
             println("Produtos  $produtos\n")
         }
     }
+    
     println("Digite qualquer tecla para voltar...")
     var opcTeste = readLine()
 }
 
-fun limparConsole() {
-    for (i in 1..50) {
-        println()
-    }
-}
 
-// vezesClientesCompraramNumMes
+//Idas ao Supermercado no Ano-Mes
 fun mostrarIdasAoSuperAnoMes(listaPorData: MutableMap<String, MutableMap<String, Int>>){
-
     for ((data, clientes) in listaPorData) {
         val contagemClientesPorIdas = mutableMapOf<Int, Int>().withDefault { 0 }
 
@@ -103,39 +100,107 @@ fun mostrarIdasAoSuperAnoMes(listaPorData: MutableMap<String, MutableMap<String,
 
         println("\n")
     }
+    
     println("\nDigite qualquer tecla para voltar...")
     readLine()
 }
 
 
+//Total de Produtos Comprados no Ano-Mes
+fun mostrarPorNumProdComprados(listaPorData: MutableMap<String, MutableMap<Int, List<String>>>) {
+    for (line in listaPorData) {
+        val ano = line.key.substring(0, 4)
+        val Mes = line.key.substring(5, 7)
+        println("---------------------------------------")
+        println("\nData: $Mes - $ano\n")
 
-// tens de verificar, porque não procura por formato de data.
-fun mostrarPorNumeroProductosComprados(listaPorData: MutableMap<String, MutableMap<String, List<String>>>) {
-    println("Digite o ano e mês (no formato AAAA-MM) para ver o número de produtos comprados:")
-    print("Ano-Mês: ")
-    val anoMes = readLine()?.trim()
+        val QuantCli = line.value
+        for (cliente in QuantCli) {
 
-    if (anoMes != null && listaPorData.containsKey(anoMes)) {
-        val comprasPorData = listaPorData[anoMes]
-        val numProductosComprados = mutableMapOf<String, Int>()
-
-        comprasPorData?.forEach { (_, productos) ->
-            val productosSinInfo = productos.drop(3) // Se omite la información de ID, ID_Cliente y Data
-            productosSinInfo.forEach { producto ->
-                numProductosComprados[producto] = numProductosComprados.getOrDefault(producto, 0) + 1
+            val QuantComprada = cliente.key
+            val clientes = cliente.value
+            val NumCli = cliente.value.size
+            println("Compraram apenas $QuantComprada produtos: \n")
+            println("Clientes:")
+            for (line2 in clientes){
+                println("   $line2")
             }
+            println("\n")
         }
+    }
+    
+    println("Digite qualquer tecla para voltar...")
+    var opcTeste = readLine()
+}
 
-        println("\nNúmero de produtos comprados no mês $anoMes:")
-        numProductosComprados.forEach { (producto, cantidad) ->
-            println("Produto: $producto, Cantidad: $cantidad")
+
+//Frequência de Compra de Produto no Ano-Mes
+fun buscarPorNumeroProductosComprados(listaPorData: MutableMap<String, MutableMap<String,Int>>){
+    println("\nNúmero de produtos comprados:")
+    for (line in listaPorData) {
+        val ano = line.key.substring(0, 4)
+        val Mes = line.key.substring(5, 7)
+        println("---------------------------------------")
+        println("\nData: $Mes - $ano\n")
+        val prodQuant = line.value
+        for (x in prodQuant) {
+            println("${x.key} foi comprado ${x.value} ${if (x.value == 1) "vez" else "vezes"}")
         }
-    } else {
-        println("Não há dados disponíveis para o ano e mês especificados.")
     }
 
-    println("\nDigite qualquer tecla para voltar...")
-    readLine()
+    println("Digite qualquer tecla para voltar...")
+    var opcTeste = readLine()
+}
 
 
+//Pesuisar por Ano-Mes
+fun comprasAnoMes(anoMes: String ,prdutosNoAnoMes: MutableMap<String, List<String>>){
+    println("Compras feitas na data $anoMes:")
+    for(line in prdutosNoAnoMes){
+        val clienteId = line.key.substring(0,4)
+        val produtos = line.value
+        println(" Cliente  $clienteId")
+        println("Produtos  $produtos\n")
+    }
+    
+    println("Digite qualquer tecla para voltar...")
+    var opcTeste = readLine()
+}
+
+
+//Super Pesquisa
+fun mostrarSuperPesq(dadosSuper: MutableMap<Int, MutableMap<Int, MutableMap<Int, MutableMap<Int, List<String>>>>>){
+    for (line in dadosSuper) {
+        var anoc = line.key
+        var anod = line.value
+        println("ANO: ${anoc}")
+        for (x in anod){
+            var mesc = x.key
+            var mesd = x.value
+            println("MES: ${mesc}")
+            for (y in mesd){
+
+                var diac = y.key
+                var diad = y.value
+                println("DIA: ${diac}")
+                for (z in diad){
+                    val cliente = z.key.toString().substring(0,4)
+                    println("CLIENTE: ${cliente}")
+                    println("PRODUTOS: ${z.value}\n")
+
+                }
+            }
+        }
+    }
+
+    println("Digite qualquer tecla para voltar...")
+    var opcTeste = readLine()
+}
+
+
+//Limpar Console
+fun limparConsole() {
+    for (i in 1..40) {
+        println()
+    }
 }
