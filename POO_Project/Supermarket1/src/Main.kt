@@ -15,7 +15,6 @@ fun main() {
         val file = try {
 
             var ficheiro = "dados_organizados.csv"
-            // var file = Compras(fileCompras = "C:\\Users\\gerem\\OneDrive\\Escritorio\\U.A\\SuperMarket\\SuperMarket1\\src\\compras.csv")
             Compras(fileCompras = "$caminho$ficheiro")
         } catch (e: IOException) {
             println("Erro ao carregar o ficheiro CSV: ${e.message}")
@@ -35,7 +34,11 @@ fun main() {
         println("--------------------------------------------------")
         print("\nEscolha uma opção: ")
 
-        opc = readLine()?.toIntOrNull() ?: -1
+        opc = try {
+            readLine()?.toIntOrNull() ?: -1
+        } catch (e: NumberFormatException) {
+            -1
+        }
 
         when (opc) {
             1 -> {
@@ -58,8 +61,16 @@ fun main() {
                 println("Digite o ano e mês (no formato AAAA-MM) para pesquisar produtos:")
                 print("Ano-Mês: ")
                 val anoMes = readLine()!!.trim()
-                val produtosNoAnoMes: MutableMap<String, List<String>> = file.pesquisarProdutoNoAnoMes(anoMes)!!
-                comprasAnoMes(anoMes, produtosNoAnoMes)
+                if (!anoMes.isNullOrEmpty()) {
+                    val produtosNoAnoMes: MutableMap<String, List<String>>? = file.pesquisarProdutoNoAnoMes(anoMes)
+                    if (produtosNoAnoMes != null) {
+                        comprasAnoMes(anoMes, produtosNoAnoMes)
+                    } else {
+                        println("Nenhum dado encontrado para $anoMes")
+                    }
+                } else {
+                    println("Entrada inválida.")
+                }
             }
             6 -> {
                 val dadosSuper = file.superPesq()
@@ -78,30 +89,41 @@ fun main() {
     } while (opc != 0)
 }
 
-
-//Todos os Dados por Ano-Mes
 fun todosDadosPorData(listaPorData: MutableMap<String, MutableMap<String, List<String>>>){
     for (line in listaPorData) {
-        val ano = line.key.substring(0, 4)
-        val Mes = line.key.substring(5, 7)
+        val ano = try {
+            line.key.substring(0, 4)
+        } catch (e: StringIndexOutOfBoundsException) {
+            println("Erro ao obter o ano: ${e.message}")
+            return
+        }
+        val Mes = try {
+            line.key.substring(5, 7)
+        } catch (e: StringIndexOutOfBoundsException) {
+            println("Erro ao obter o mês: ${e.message}")
+            return
+        }
         println("\nCompras na data: $Mes - $ano\n")
 
         val innerMap = line.value
         for (cliente in innerMap) {
 
-            val clienteId = cliente.key.substring(0,4)
+            val clienteId = try {
+                cliente.key.substring(0, 4)
+            } catch (e: StringIndexOutOfBoundsException) {
+                println("Erro ao extrair o cliente ID: ${e.message}")
+                continue
+            }
             val produtos = cliente.value
 
             println(" Cliente  $clienteId")
             println("Produtos  $produtos\n")
         }
     }
-    println("Digite qualquer tecla para voltar...")
+    print("Digite qualquer tecla para voltar...")
     var opcTeste = readLine()
 }
 
-
-//Idas ao Supermercado no Ano-Mes
 fun mostrarIdasAoSuperAnoMes(listaPorData: MutableMap<String, MutableMap<String, Int>>){
     for ((data, clientes) in listaPorData) {
         val contagemClientesPorIdas = mutableMapOf<Int, Int>().withDefault { 0 }
@@ -117,17 +139,24 @@ fun mostrarIdasAoSuperAnoMes(listaPorData: MutableMap<String, MutableMap<String,
 
         println("\n")
     }
-
-    println("\nDigite qualquer tecla para voltar...")
+    print("\nDigite qualquer tecla para voltar...")
     readLine()
 }
 
-
-//Total de Produtos Comprados no Ano-Mes
 fun mostrarPorNumProdComprados(listaPorData: MutableMap<String, MutableMap<Int, List<String>>>) {
     for (line in listaPorData) {
-        val ano = line.key.substring(0, 4)
-        val Mes = line.key.substring(5, 7)
+        val ano = try {
+            line.key.substring(0, 4)
+        } catch (e: StringIndexOutOfBoundsException) {
+            println("Erro ao extrair o cliente ID: ${e.message}")
+            continue
+        }
+        val Mes = try {
+            line.key.substring(5, 7)
+        } catch (e: StringIndexOutOfBoundsException) {
+            println("Erro ao extrair o cliente ID: ${e.message}")
+            continue
+        }
         println("---------------------------------------")
         println("\nData: $Mes - $ano\n")
 
@@ -145,18 +174,25 @@ fun mostrarPorNumProdComprados(listaPorData: MutableMap<String, MutableMap<Int, 
             println("\n")
         }
     }
-    
-    println("Digite qualquer tecla para voltar...")
+    print("Digite qualquer tecla para voltar...")
     var opcTeste = readLine()
 }
 
-
-//Frequência de Compra de Produto no Ano-Mes
 fun buscarPorNumeroProductosComprados(listaPorData: MutableMap<String, MutableMap<String,Int>>){
     println("\nNúmero de produtos comprados:")
     for (line in listaPorData) {
-        val ano = line.key.substring(0, 4)
-        val Mes = line.key.substring(5, 7)
+        val ano = try {
+            line.key.substring(0, 4)
+        } catch (e: StringIndexOutOfBoundsException) {
+            println("Erro ao extrair o cliente ID: ${e.message}")
+            continue
+        }
+        val Mes = try {
+            line.key.substring(5, 7)
+        } catch (e: StringIndexOutOfBoundsException) {
+            println("Erro ao extrair o cliente ID: ${e.message}")
+            continue
+        }
         println("---------------------------------------")
         println("\nData: $Mes - $ano\n")
         val prodQuant = line.value
@@ -165,7 +201,7 @@ fun buscarPorNumeroProductosComprados(listaPorData: MutableMap<String, MutableMa
         }
     }
 
-    println("Digite qualquer tecla para voltar...")
+    print("Digite qualquer tecla para voltar...")
     var opcTeste = readLine()
 }
 
@@ -179,50 +215,149 @@ fun comprasAnoMes(anoMes: String ,prdutosNoAnoMes: MutableMap<String, List<Strin
         println(" Cliente  $clienteId")
         println("Produtos  $produtos\n")
     }
-    println("Digite qualquer tecla para voltar...")
+    print("Digite qualquer tecla para voltar...")
     var opcTeste = readLine()
 }
 
-
-//Super Pesquisa
 fun mostrarSuperPesq(dadosSuper: MutableMap<Int, MutableMap<Int, MutableMap<Int, MutableMap<Int, List<String>>>>>){
     for (line in dadosSuper) {
-        var anoc = line.key
-        var anod = line.value
-        println("ANO: ${anoc}")
+        val anoc = try {
+            line.key
+        } catch (e: StringIndexOutOfBoundsException) {
+            println("Erro ao extrair o cliente ID: ${e.message}")
+            continue
+        }
+        val anod = try {
+            line.value
+        } catch (e: StringIndexOutOfBoundsException) {
+            println("Erro ao extrair o cliente ID: ${e.message}")
+            continue
+        }
+        println("\n\n-----------------ANO: ${anoc}----------------\n")
         for (x in anod){
-            var mesc = x.key
-            var mesd = x.value
-            println("MES: ${mesc}")
+            val mesc = try {
+                x.key
+            } catch (e: StringIndexOutOfBoundsException) {
+                println("Erro ao extrair o cliente ID: ${e.message}")
+                continue
+            }
+            val mesd = try {
+                x.value
+            } catch (e: StringIndexOutOfBoundsException) {
+                println("Erro ao extrair o cliente ID: ${e.message}")
+                continue
+            }
+            println("_______MES: ${mesc}_______")
             for (y in mesd){
 
-                var diac = y.key
-                var diad = y.value
-                println("DIA: ${diac}")
+                val diac = try {
+                    y.key
+                } catch (e: StringIndexOutOfBoundsException) {
+                    println("Erro ao extrair o cliente ID: ${e.message}")
+                    continue
+                }
+                val diad = try {
+                    y.value
+                } catch (e: StringIndexOutOfBoundsException) {
+                    println("Erro ao extrair o cliente ID: ${e.message}")
+                    continue
+                }
+                println("   DIA: ${diac}")
                 for (z in diad){
                     val cliente = z.key.toString().substring(0,4)
-                    println("CLIENTE: ${cliente}")
-                    println("PRODUTOS: ${z.value}\n")
-
+                    println("\t  CLIENTE: ${cliente}")
+                    println("\t  PRODUTOS: ${z.value}\n")
                 }
             }
+            println("\n")
         }
     }
+    do {
+        print("Pretende fazer uma pesquisa? \n   1-Sim \n   0-Não")
+        print("\n\nOpc: ")
+        val opcTeste = readLine()
 
-    println("Digite qualquer tecla para voltar...")
-    var opcTeste = readLine()
+        if (opcTeste != "0" && opcTeste != "1") {
+            println("Opc inválida! Opções válidas 1 ou 0")
+            continue
+        }
+
+        if (opcTeste == "1") {
+            println("\n\nInsira o Ano, Mes e dia nas seguintes opções. \nSe não pretender dizer uma delas deixar em branco")
+
+            println("\nAno? ")
+            val Ano = readLine()?.toIntOrNull()
+            println("\nMes? ")
+            val Mes = readLine()?.toIntOrNull()
+            println("\nDia? ")
+            val Dia = readLine()?.toIntOrNull()
+
+            if (Ano != null && dadosSuper.containsKey(Ano)) {
+                println("\n\n-----------------ANO: ${Ano}----------------\n")
+                val anoData = dadosSuper[Ano]
+                if (Mes != null && anoData?.containsKey(Mes) == true) {
+                    println("_______MES: ${Mes}_______")
+                    val mesData = anoData[Mes]
+                    if (Dia != null && mesData?.containsKey(Dia) == true) {
+                        println("   DIA: ${Dia}")
+                        val diaData = mesData[Dia]
+                        for (e in diaData!!) {
+                            val cliente = e.key.toString().substring(0,4)
+                            println("\t  CLIENTE: ${cliente}")
+                            println("\t  PRODUTOS: ${e.value}\n")
+                        }
+                    } else if (Dia == null) {
+                        for ((diac, diad) in mesData!!) {
+                            println("   DIA: ${diac}")
+                            for (z in diad) {
+                                val cliente = z.key.toString().substring(0,4)
+                                println("\t  CLIENTE: ${cliente}")
+                                println("\t  PRODUTOS: ${z.value}\n")
+                            }
+                        }
+                    }
+                } else if (Mes == null) {
+                    for ((mesc, mesd) in anoData!!) {
+                        println("_______MES: ${mesc}_______")
+                        for ((diac, diad) in mesd) {
+                            println("   DIA: ${diac}")
+                            for (z in diad) {
+                                val cliente = z.key.toString().substring(0,4)
+                                println("\t  CLIENTE: ${cliente}")
+                                println("\t  PRODUTOS: ${z.value}\n")
+                            }
+                        }
+                    }
+                }
+            } else if (Ano == null) {
+                for ((anoc, anod) in dadosSuper) {
+                    println("\n\n-----------------ANO: ${anoc}----------------\n")
+                    for ((mesc, mesd) in anod) {
+                        println("_______MES: ${mesc}_______")
+                        for ((diac, diad) in mesd) {
+                            println("   DIA: ${diac}")
+                            for (z in diad) {
+                                val cliente = z.key.toString().substring(0,4)
+                                println("\t  CLIENTE: ${cliente}")
+                                println("\t  PRODUTOS: ${z.value}\n")
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            println("\n------A sair da super pesquisa------")
+        }
+
+    } while (opcTeste != "0")
 }
 
-
-//Limpar Console
 fun limparConsole() {
     for (i in 1..40) {
         println()
     }
 }
 
-
-//Pedir ficheiro
 fun perguntarFicheiro(){
     limparConsole()
     val csvFiles = findCsvFiles(caminho)
@@ -241,7 +376,6 @@ fun perguntarFicheiro(){
     }
 
     var opcFicheiro: Int = -1
-    //Executa até ser uma opção valida
     while (opcFicheiro !in 0 until csvFiles.size) {
         print("Ficheiro: ")
         try {
@@ -270,8 +404,6 @@ fun perguntarFicheiro(){
     organizer.processCsv()
 }
 
-
-//Procurar todos os ficheiros .csv
 fun findCsvFiles(directoryPath: String): List<File> {
     val directory = File(directoryPath)
     return directory.listFiles { file ->
