@@ -1,14 +1,27 @@
+import java.io.File
 import java.io.IOException
+
+var caminho = "src\\main\\kotlin\\ficheiros\\"
 
 fun main() {
     var opc: Int = 100
+
+    println("Segmentação de Clientes de um Supermercado!\n")
+    perguntarFicheiro()
+
     do {
         limparConsole()
-        println("Segmentação de Clientes de um Supermercado!\n")
 
-        //var file = Compras(fileCompras = "C:\\Users\\gerem\\OneDrive\\Escritorio\\U.A\\SuperMarket\\SuperMarket1\\src\\compras.csv")
-        var file = Compras(fileCompras = "src\\main\\kotlin\\compras.csv")
-        var dadosC = file.load()
+        val file = try {
+
+            var ficheiro = "dados_organizados.csv"
+            // var file = Compras(fileCompras = "C:\\Users\\gerem\\OneDrive\\Escritorio\\U.A\\SuperMarket\\SuperMarket1\\src\\compras.csv")
+            Compras(fileCompras = "$caminho$ficheiro")
+        } catch (e: IOException) {
+            println("Erro ao carregar o ficheiro CSV: ${e.message}")
+            return
+        }
+
 
         println("------------------------Menu----------------------")
         println("| 1 - Todos os Dados por Ano-Mes                 |")
@@ -17,6 +30,7 @@ fun main() {
         println("| 4 - Frequência de Compra de Produto no Ano-Mes |")
         println("| 5 - Pesuisar por Ano-Mes                       |")
         println("| 6 - Super Pesquisa                             |")
+        println("| 7 - Mudar de Ficheiro                          |")
         println("| 0 - Sair                                       |")
         println("--------------------------------------------------")
         print("\nEscolha uma opção: ")
@@ -51,6 +65,9 @@ fun main() {
                 val dadosSuper = file.superPesq()
                 mostrarSuperPesq(dadosSuper)
             }
+            7 -> {
+                perguntarFicheiro()
+            }
             0 -> {
                 println("\n\n--------------------Adeus!------------------------")
             }
@@ -60,6 +77,7 @@ fun main() {
         }
     } while (opc != 0)
 }
+
 
 //Todos os Dados por Ano-Mes
 fun todosDadosPorData(listaPorData: MutableMap<String, MutableMap<String, List<String>>>){
@@ -78,7 +96,6 @@ fun todosDadosPorData(listaPorData: MutableMap<String, MutableMap<String, List<S
             println("Produtos  $produtos\n")
         }
     }
-    
     println("Digite qualquer tecla para voltar...")
     var opcTeste = readLine()
 }
@@ -100,7 +117,7 @@ fun mostrarIdasAoSuperAnoMes(listaPorData: MutableMap<String, MutableMap<String,
 
         println("\n")
     }
-    
+
     println("\nDigite qualquer tecla para voltar...")
     readLine()
 }
@@ -162,7 +179,6 @@ fun comprasAnoMes(anoMes: String ,prdutosNoAnoMes: MutableMap<String, List<Strin
         println(" Cliente  $clienteId")
         println("Produtos  $produtos\n")
     }
-    
     println("Digite qualquer tecla para voltar...")
     var opcTeste = readLine()
 }
@@ -203,4 +219,62 @@ fun limparConsole() {
     for (i in 1..40) {
         println()
     }
+}
+
+
+//Pedir ficheiro
+fun perguntarFicheiro(){
+    limparConsole()
+    val csvFiles = findCsvFiles(caminho)
+
+    if (csvFiles.isEmpty()) {
+        println("Não foram encontrados arquivos CSV na pasta atual.")
+    } else {
+        println("\n\nQual ficheiro pretende usar?")
+        println("------------------------------------")
+        var opc3: Int = 0
+        csvFiles.forEach {
+            opc3 += 1
+            println("     $opc3-${it.name}")
+        }
+        println("------------------------------------")
+    }
+
+    var opcFicheiro: Int = -1
+    //Executa até ser uma opção valida
+    while (opcFicheiro !in 0 until csvFiles.size) {
+        print("Ficheiro: ")
+        try {
+            opcFicheiro = readLine()?.toInt()?.minus(1) ?: -1
+        } catch (e: NumberFormatException) {
+            opcFicheiro = -1
+        }
+
+        if (opcFicheiro !in 0 until csvFiles.size) {
+            println("Opção inválida. Tente novamente.")
+        }
+    }
+
+    var nomeFicheiro = csvFiles[opcFicheiro].toString()
+    nomeFicheiro = nomeFicheiro.substring(4, nomeFicheiro.length - 4)
+    println(nomeFicheiro)
+
+    var inputFilePath = "src\\$nomeFicheiro.csv"
+
+    if (inputFilePath.isNullOrBlank()) {
+        println("Ficheiro Inválido.")
+        return
+    }
+
+    val organizer = CsvOrganizer(inputFilePath)
+    organizer.processCsv()
+}
+
+
+//Procurar todos os ficheiros .csv
+fun findCsvFiles(directoryPath: String): List<File> {
+    val directory = File(directoryPath)
+    return directory.listFiles { file ->
+        file.isFile && file.extension.equals("csv", ignoreCase = true)
+    }?.toList() ?: emptyList()
 }
